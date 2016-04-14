@@ -53,11 +53,22 @@ def get_data():
 
 @app.route('/directory')
 def view_directory():
-    return 'FIXME'
+    return render_template('directory.html', students=get_data())
 
 @app.route('/directory/<username>')
 def view_student(username):
-    return 'FIXME'
+    students = get_data()
+    try:
+        student_instance = list(filter(lambda student: student.username == username, students))[0]
+    except IndexError:
+        pass
+    index_prev_student = students.index(student_instance) - 1
+    try:
+        index_next_student = students.index(student_instance) + 1
+        return render_template('student.html', student=student_instance, prev_student=students[index_prev_student], next_student=students[index_next_student])
+    except:
+        index_next_student = 0
+        return render_template('student.html', student=student_instance, prev_student=students[index_prev_student], next_student=students[index_next_student])
 
 # DON'T TOUCH THE CODE BELOW THIS LINE
 
